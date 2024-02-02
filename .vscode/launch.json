@@ -7,15 +7,15 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'proxy-reencryption'",
+            "name": "Debug executable 'proxy_reencryption'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=proxy-reencryption",
-                    "--package=proxy-reencryption"
+                    "--bin=proxy_reencryption",
+                    "--package=proxy_reencryption"
                 ],
                 "filter": {
-                    "name": "proxy-reencryption",
+                    "name": "proxy_reencryption",
                     "kind": "bin"
                 }
             },
@@ -25,16 +25,16 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in executable 'proxy-reencryption'",
+            "name": "Debug unit tests in executable 'proxy_reencryption'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--bin=proxy-reencryption",
-                    "--package=proxy-reencryption"
+                    "--bin=proxy_reencryption",
+                    "--package=proxy_reencryption"
                 ],
                 "filter": {
-                    "name": "proxy-reencryption",
+                    "name": "proxy_reencryption",
                     "kind": "bin"
                 }
             },

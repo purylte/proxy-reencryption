@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "proxy-reencryption"
+name = "proxy_reencryption"
 version = "0.1.0"
