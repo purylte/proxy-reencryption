@@ -15,3 +15,6 @@ name = "proxy_reencryption"
 path = "src/bin.rs"
 
 [dependencies]
+aes = "0.8.4"
+rand = "0.8.5"
+sha2 = "0.10.8"
