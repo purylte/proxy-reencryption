@@ -1,4 +1,4 @@
-pub fn permutation<T: Clone>(p: Vec<usize>, x: Vec<T>) -> Vec<T> {
+pub fn permutation<T: Clone>(p: &Vec<usize>, x: &Vec<T>) -> Vec<T> {
     let mut result = x.clone();
     for i in 0..p.len() {
         result.swap(i, p[i]);
@@ -6,7 +6,7 @@ pub fn permutation<T: Clone>(p: Vec<usize>, x: Vec<T>) -> Vec<T> {
     result
 }
 
-pub fn depermutation<T: Clone>(p: Vec<usize>, x: Vec<T>) -> Vec<T> {
+pub fn depermutation<T: Clone>(p: &Vec<usize>, x: &Vec<T>) -> Vec<T> {
     let mut result = x.clone();
     for i in 0..p.len() {
         result.swap(p[i], i);
