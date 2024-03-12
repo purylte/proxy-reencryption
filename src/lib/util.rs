@@ -3,6 +3,7 @@ use aes::cipher::{
     BlockEncrypt, KeyInit,
 };
 use aes::Aes128;
+use rand::{thread_rng, Rng};
 use sha2::{Digest, Sha256};
 
 pub fn hash(x: &[u8]) -> [u8; 16] {
@@ -26,4 +27,10 @@ pub fn encrypt(plaintext: u8, key: &[u8; 16]) -> [u8; 16] {
     cipher.encrypt_block(&mut block);
 
     block.as_slice().try_into().unwrap()
+}
+
+pub fn new_random_arr<const N: usize>() -> [u8; N] {
+    let mut k = [0u8; N];
+    thread_rng().fill(&mut k[..]);
+    k
 }

@@ -14,12 +14,13 @@ pub fn depermutation<T: Clone>(p: &Vec<usize>, x: &Vec<T>) -> Vec<T> {
     result
 }
 
-pub fn find_conversion_key<const N: usize>(pa: &[u8; N], pb: &[u8; N]) -> [u8; N] {
-    let mut pc = [0; N];
-    for i in 0..N {
-        for j in 0..N {
+pub fn find_conversion_key(pa: &Vec<usize>, pb: &Vec<usize>) -> Vec<usize> {
+    let n = pa.len();
+    let mut pc = Vec::with_capacity(n);
+    for i in 0..n {
+        for j in 0..n {
             if pa[i] == pb[j] {
-                pc[j] = i as u8;
+                pc[j] = i;
                 break;
             }
         }
