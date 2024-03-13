@@ -15,7 +15,7 @@ pub fn encryption(
     m: Vec<[u8; 16]>,
     n: usize,
 ) -> ([u8; 16], Vec<[u8; 16]>) {
-    let (p1, p2, p3) = key_generator(false, k1, k2, k3, n);
+    let (p1, p2, p3) = key_generator_with_keys(k1, k2, k3, n);
     let iv = new_random_arr::<16>();
     let m_1: Vec<[u8; 16]> = e_aonth(ctr, &m);
     let m_2 = permutation(&p3, &m);
@@ -46,7 +46,7 @@ pub fn decryption(
     c: Vec<[u8; 16]>,
     n: usize,
 ) -> Vec<[u8; 16]> {
-    let (p1, p2, p3) = key_generator(false, k1, k2, k3, n);
+    let (p1, p2, p3) = key_generator_with_keys(k1, k2, k3, n);
 
     let mut m_2: Vec<[u8; 16]> = Vec::with_capacity(n);
     for i in n - 1..0 {
@@ -116,20 +116,29 @@ fn pg(key: &[u8; 16], n: usize) -> Vec<usize> {
     p
 }
 
-fn key_generator(
-    g: bool,
+fn key_generator_with_keys(
     k1: &[u8; 16],
     k2: &[u8; 16],
     k3: &[u8; 16],
     n: usize,
 ) -> (Vec<usize>, Vec<usize>, Vec<usize>) {
-    if !g {
-        let p1 = pg(k1, 16);
-        let p2 = pg(k2, 16);
-        let p3 = pg(k3, n);
+    let p1 = pg(k1, 16);
+    let p2 = pg(k2, 16);
+    let p3 = pg(k3, n);
 
-        return (p1, p2, p3);
-    }
+    (p1, p2, p3)
+}
+
+fn key_generator(
+    n: usize,
+) -> (
+    Vec<usize>,
+    Vec<usize>,
+    Vec<usize>,
+    [u8; 16],
+    [u8; 16],
+    [u8; 16],
+) {
     let t_k1 = new_random_arr::<16>();
     let t_k2 = new_random_arr::<16>();
     let t_k3 = new_random_arr::<16>();
@@ -138,12 +147,17 @@ fn key_generator(
     let p2 = pg(&t_k2, 16);
     let p3 = pg(&t_k3, n);
 
-    (p1, p2, p3)
+    (p1, p2, p3, t_k1, t_k2, t_k3)
 }
 
-fn reencryption_key_generator(k1: &[u8; 16], k2: &[u8; 16], k3: &[u8; 16], n: usize) {
-    let (p1, p2, p3) = key_generator(false, k1, k2, k3, n);
-    let (p1_1, p2_1, p3_1) = key_generator(true, &[0u8; 16], &[0u8; 16], &[0u8; 16], n);
+fn reencryption_key_generator<'a>(
+    k1: &[u8; 16],
+    k2: &'a [u8; 16],
+    k3: &[u8; 16],
+    n: usize,
+) -> (Vec<usize>, &'a [u8; 16], [u8; 16], Vec<usize>) {
+    let (p1, _p2, p3) = key_generator_with_keys(k1, k2, k3, n);
+    let (p1_1, _p2_1, p3_1, _k1_1, k2_1, _k3_1) = key_generator(n);
     let ck1 = find_conversion_key(&p1, &p1_1);
     let ck3 = find_conversion_key(&p3, &p3_1);
 
