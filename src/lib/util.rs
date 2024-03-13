@@ -14,7 +14,8 @@ pub fn hash(x: &[u8]) -> [u8; 16] {
 }
 
 pub fn xor(a: &Vec<u8>, b: &Vec<u8>) -> Vec<u8> {
-    Vec::new()
+    let res = a.iter().zip(b.iter()).map(|(x, y)| x ^ y).collect();
+    res
 }
 
 pub fn encrypt(plaintext: u8, key: &[u8; 16]) -> [u8; 16] {
