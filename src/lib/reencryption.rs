@@ -12,17 +12,17 @@ pub fn encryption(
     k2: &[u8; 16],
     k3: &[u8; 16],
     ctr: u8,
-    m: Vec<[u8; 16]>,
-    n: usize,
+    m: &Vec<[u8; 16]>,
 ) -> ([u8; 16], Vec<[u8; 16]>) {
+    let n = m.len();
     let (p1, p2, p3) = key_generator_with_keys(k1, k2, k3, n);
     let iv = new_random_arr::<16>();
     let m_1: Vec<[u8; 16]> = e_aonth(ctr, &m);
     let m_2 = permutate_vec(&p3, &m);
-    let mut c: Vec<[u8; 16]> = Vec::with_capacity(n + 1);
-    c[0] = xor(&permutate(&p1, &(m_1[n + 1])), &permutate(&p2, &iv));
+    let mut c: Vec<[u8; 16]> = vec![[0; 16]; n + 1];
+    c[0] = xor(&permutate(&p1, &(m_1[n])), &permutate(&p2, &iv));
     for i in 0..n {
-        c[i + i] = xor(&permutate(&p1, &m_2[i]), &permutate(&p2, &c[i]))
+        c[i + 1] = xor(&permutate(&p1, &m_2[i]), &permutate(&p2, &c[i]))
     }
     (iv, c)
 }
@@ -33,19 +33,19 @@ pub fn decryption(
     k3: &[u8; 16],
     ctr: u8,
     iv: &[u8; 16],
-    c: Vec<[u8; 16]>,
-    n: usize,
+    c: &Vec<[u8; 16]>,
 ) -> Vec<[u8; 16]> {
+    let n = c.len() - 1;
     let (p1, p2, p3) = key_generator_with_keys(k1, k2, k3, n);
 
-    let mut m_2: Vec<[u8; 16]> = Vec::with_capacity(n);
+    let mut m_2: Vec<[u8; 16]> = vec![[0; 16]; n];
     for i in n - 1..0 {
         m_2[i] = depermutate(&p1, &xor(&c[i], &permutate(&p2, &c[i])));
     }
 
     let mut m_1: Vec<[u8; 16]> = Vec::with_capacity(n + 1);
     m_1.extend(depermutate_vec(&p3, &m_2));
-    m_1[n] = depermutate(&p1, &xor(&c[0], &permutate(&p2, &iv)));
+    m_1.push(depermutate(&p1, &xor(&c[0], &permutate(&p2, &iv))));
 
     let m = d_aonth(ctr, &m_1);
     m
@@ -57,24 +57,24 @@ pub fn reencryption(
     k2_2: &[u8; 16],
     ck3: Vec<usize>,
     iv: &[u8; 16],
-    c: Vec<[u8; 16]>,
-    n: usize,
+    c: &Vec<[u8; 16]>,
 ) -> ([u8; 16], Vec<[u8; 16]>) {
+    let n = c.len() - 1;
     let p2 = pg(k2, 16);
     let p2_2 = pg(k2_2, 16);
-    let mut c_1: Vec<[u8; 16]> = Vec::with_capacity(n);
+    let mut c_1: Vec<[u8; 16]> = vec![[0; 16]; n];
     for i in n..0 {
         c_1[i] = permutate(&ck1, &xor(&c[i], &permutate(&p2, &c[i - 1])))
     }
     let mut c_2: Vec<[u8; 16]> = Vec::with_capacity(n + 1);
-    c_2[0] = xor(
+    c_2.push(xor(
         &permutate(&ck1, &xor(&c[0], &permutate(&p2, &iv))),
         &permutate(&p2_2, &iv),
-    );
+    ));
 
     c_2.extend(permutate_vec(&ck3, &c[1..].to_vec()));
 
-    let mut c_res = Vec::with_capacity(n + 1);
+    let mut c_res = vec![[0; 16]; n + 1];
     c_res[0] = c[0];
     for i in 1..n + 1 {
         c_res[i] = xor(&c_2[i], &permutate(&p2, &c_2[i - 1]));
