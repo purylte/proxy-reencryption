@@ -13,8 +13,14 @@ pub fn hash(x: &[u8]) -> [u8; 16] {
     digest
 }
 
-pub fn xor(a: &Vec<u8>, b: &Vec<u8>) -> Vec<u8> {
-    let res = a.iter().zip(b.iter()).map(|(x, y)| x ^ y).collect();
+pub fn xor<const N: usize>(a: &[u8; N], b: &[u8; N]) -> [u8; N] {
+    let res = a
+        .iter()
+        .zip(b.iter())
+        .map(|(x, y)| x ^ y)
+        .collect::<Vec<u8>>()
+        .try_into()
+        .unwrap();
     res
 }
 

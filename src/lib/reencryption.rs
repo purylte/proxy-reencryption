@@ -1,6 +1,6 @@
 use crate::{
-    aonth::d_aonth,
-    depermutation, e_aonth, find_conversion_key, permutation,
+    aonth::{d_aonth, e_aonth},
+    permutation::{depermutate, depermutate_vec, find_conversion_key, permutate, permutate_vec},
     util::{encrypt, new_random_arr, xor},
 };
 
@@ -18,21 +18,11 @@ pub fn encryption(
     let (p1, p2, p3) = key_generator_with_keys(k1, k2, k3, n);
     let iv = new_random_arr::<16>();
     let m_1: Vec<[u8; 16]> = e_aonth(ctr, &m);
-    let m_2 = permutation(&p3, &m);
+    let m_2 = permutate_vec(&p3, &m);
     let mut c: Vec<[u8; 16]> = Vec::with_capacity(n + 1);
-    c[0] = xor(
-        &permutation(&p1, &(m_1[n + 1]).to_vec()),
-        &permutation(&p2, &iv.to_vec()),
-    )
-    .try_into()
-    .unwrap();
+    c[0] = xor(&permutate(&p1, &(m_1[n + 1])), &permutate(&p2, &iv));
     for i in 0..n {
-        c[i + i] = xor(
-            &permutation(&p1, &m_2[i].to_vec()),
-            &permutation(&p2, &c[i].to_vec()),
-        )
-        .try_into()
-        .unwrap();
+        c[i + i] = xor(&permutate(&p1, &m_2[i]), &permutate(&p2, &c[i]))
     }
     (iv, c)
 }
@@ -50,16 +40,12 @@ pub fn decryption(
 
     let mut m_2: Vec<[u8; 16]> = Vec::with_capacity(n);
     for i in n - 1..0 {
-        m_2[i] = depermutation(&p1, &xor(&c[i].to_vec(), &permutation(&p2, &c[i].to_vec())))
-            .try_into()
-            .unwrap();
+        m_2[i] = depermutate(&p1, &xor(&c[i], &permutate(&p2, &c[i])));
     }
 
     let mut m_1: Vec<[u8; 16]> = Vec::with_capacity(n + 1);
-    m_1.extend(depermutation(&p3, &m_2));
-    m_1[n] = depermutation(&p1, &xor(&c[0].to_vec(), &permutation(&p2, &iv.to_vec())))
-        .try_into()
-        .unwrap();
+    m_1.extend(depermutate_vec(&p3, &m_2));
+    m_1[n] = depermutate(&p1, &xor(&c[0], &permutate(&p2, &iv)));
 
     let m = d_aonth(ctr, &m_1);
     m
@@ -78,29 +64,20 @@ pub fn reencryption(
     let p2_2 = pg(k2_2, 16);
     let mut c_1: Vec<[u8; 16]> = Vec::with_capacity(n);
     for i in n..0 {
-        c_1[i] = permutation(
-            &ck1,
-            &xor(&c[i].to_vec(), &permutation(&p2, &c[i - 1].to_vec())),
-        )
-        .try_into()
-        .unwrap();
+        c_1[i] = permutate(&ck1, &xor(&c[i], &permutate(&p2, &c[i - 1])))
     }
     let mut c_2: Vec<[u8; 16]> = Vec::with_capacity(n + 1);
     c_2[0] = xor(
-        &permutation(&ck1, &xor(&c[0].to_vec(), &permutation(&p2, &iv.to_vec()))),
-        &permutation(&p2_2, &iv.to_vec()),
-    )
-    .try_into()
-    .unwrap();
+        &permutate(&ck1, &xor(&c[0], &permutate(&p2, &iv))),
+        &permutate(&p2_2, &iv),
+    );
 
-    c_2.extend(permutation(&ck3, &c[1..].to_vec()));
+    c_2.extend(permutate_vec(&ck3, &c[1..].to_vec()));
 
     let mut c_res = Vec::with_capacity(n + 1);
     c_res[0] = c[0];
     for i in 1..n + 1 {
-        c_res[i] = xor(&c_2[i].to_vec(), &permutation(&p2, &c_2[i - 1].to_vec()))
-            .try_into()
-            .unwrap();
+        c_res[i] = xor(&c_2[i], &permutate(&p2, &c_2[i - 1]));
     }
 
     (*iv, c_res)
@@ -150,7 +127,7 @@ fn key_generator(
     (p1, p2, p3, t_k1, t_k2, t_k3)
 }
 
-fn reencryption_key_generator<'a>(
+pub fn reencryption_key_generator<'a>(
     k1: &[u8; 16],
     k2: &'a [u8; 16],
     k3: &[u8; 16],
