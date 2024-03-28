@@ -1,8 +1,7 @@
-use aes::cipher::{
-    generic_array::{typenum::U16, GenericArray},
-    BlockEncrypt, KeyInit,
-};
+use aes::cipher::BlockEncrypt;
 use aes::Aes128;
+use crypto_common::typenum::U16;
+use crypto_common::{generic_array::GenericArray, KeyInit};
 use rand::{thread_rng, Rng};
 use sha2::{Digest, Sha256};
 
@@ -40,4 +39,19 @@ pub fn new_random_arr<const N: usize>() -> [u8; N] {
     let mut k = [0u8; N];
     thread_rng().fill(&mut k[..]);
     k
+}
+
+#[cfg(test)]
+mod tools_test {
+    use super::hash;
+
+    #[test]
+    fn hash_correctness() {
+        let m = [97, 98, 99];
+        let answer = [
+            186, 120, 22, 191, 143, 1, 207, 234, 65, 65, 64, 222, 93, 174, 34, 35,
+        ];
+
+        assert_eq!(hash(&m), answer);
+    }
 }

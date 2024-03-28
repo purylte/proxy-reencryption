@@ -114,6 +114,7 @@ name = "proxy_reencryption"
 version = "0.1.0"
 dependencies = [
  "aes",
+ "crypto-common",
  "rand",
  "sha2",
 ]
