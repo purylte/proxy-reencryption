@@ -2,9 +2,9 @@ use std::io::{Error, ErrorKind, Result};
 
 use crate::{
     aonth::{d_aonth, e_aonth},
-    crypto_tools::{new_random_arr, xor},
     key_generator::{key_generator, key_generator_with_keys, pg},
     permutation::{depermutate, depermutate_vec, find_conversion_key, permutate, permutate_vec},
+    utils::{new_random_arr, xor},
 };
 
 // N: amount of block

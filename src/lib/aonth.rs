@@ -1,4 +1,4 @@
-use crate::crypto_tools::{encrypt, hash, new_random_arr, xor};
+use crate::utils::{encrypt, hash, new_random_arr, xor};
 
 pub fn e_aonth(ctr: u8, m: &Vec<[u8; 16]>) -> Vec<[u8; 16]> {
     let n = m.len();

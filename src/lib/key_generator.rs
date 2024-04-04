@@ -1,6 +1,6 @@
 use crate::{
-    crypto_tools::{encrypt, new_random_arr},
     proxy_reencryption_lib::Key,
+    utils::{encrypt, new_random_arr},
 };
 
 pub fn key_generator_with_keys(
