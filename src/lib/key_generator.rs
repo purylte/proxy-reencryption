@@ -41,7 +41,7 @@ pub fn pg(key: &Key<16>, n: usize) -> Vec<usize> {
     let mut p: Vec<usize> = (0..n).collect();
     let mut tmp: Vec<[u8; 16]> = Vec::new();
     for i in 0..n {
-        tmp.push(encrypt(i as u8, &key.key));
+        tmp.push(encrypt(i as u16, &key.key));
     }
     p.sort_by_key(|&x| tmp[(x) as usize]);
     p

@@ -1,9 +1,5 @@
-pub fn permutate_vec<T: Clone + Copy>(p: &Vec<usize>, x: &Vec<T>) -> Vec<T> {
-    let mut result = Vec::with_capacity(p.len());
-    for i in 0..p.len() {
-        result.push(x[p[i]]);
-    }
-    result
+pub fn permutate_vec<'a, T>(p: &[usize], x: &'a [T]) -> Vec<&'a T> {
+    p.iter().map(|&index| &x[index]).collect()
 }
 
 pub fn depermutate_vec<T: Clone + Copy>(p: &Vec<usize>, x: &Vec<T>) -> Vec<T> {
@@ -14,10 +10,10 @@ pub fn depermutate_vec<T: Clone + Copy>(p: &Vec<usize>, x: &Vec<T>) -> Vec<T> {
     result
 }
 
-pub fn permutate<T: Clone + Copy, const N: usize>(p: &Vec<usize>, x: &[T; N]) -> [T; N] {
-    let mut result = [x[0].clone(); N];
-    for i in 0..p.len() {
-        result[i] = x[p[i]];
+pub fn permutate<T: Copy, const N: usize>(p: &[usize], x: &[T; N]) -> [T; N] {
+    let mut result = [x[0]; N]; // Assumes T: Copy for initial value, minimal cloning here
+    for (i, &pi) in p.iter().enumerate() {
+        result[i] = x[pi]; // Direct copy without repeated cloning
     }
     result
 }
@@ -53,7 +49,7 @@ mod permutation_tests {
         assert_eq!(permutate(&vec!(1, 0, 3, 2), &[1, 2, 3, 4]), [2, 1, 4, 3]);
         assert_eq!(
             permutate_vec(&vec!(1, 0, 3, 2), &vec!(1, 2, 3, 4)),
-            [2, 1, 4, 3]
+            [&2, &1, &4, &3]
         );
         assert_eq!(depermutate(&vec!(3, 0, 1, 2), &[1, 2, 3, 4]), [2, 3, 4, 1]);
         assert_eq!(

@@ -1,4 +1,7 @@
-use std::io::{Error, ErrorKind, Result};
+use std::{
+    io::{Error, ErrorKind, Result},
+    time::Instant,
+};
 
 use crate::{
     aonth::{d_aonth, e_aonth},
@@ -17,7 +20,7 @@ impl ProxyReencryption {
         k2: &Key<16>,
         k3: &Key<16>,
         ctr: u8,
-        m: Blocks,
+        m: &Blocks,
     ) -> ([u8; 16], Blocks) {
         let n = m.blocks.len();
 
@@ -25,23 +28,34 @@ impl ProxyReencryption {
         let (p1, p2, p3) = key_generator_with_keys(k1, k2, k3, n);
 
         // iv <- {0,1}^l
-        let iv = new_random_arr::<16>();
+        let iv: [u8; 16] = new_random_arr::<16>();
 
+        let aonth_now = Instant::now();
         // m'[1]...m'[n+1] <- E-AONTH(ctr, m[1]...m[n])
         let m_1: Vec<[u8; 16]> = e_aonth(ctr, &m.blocks);
+        println!("Elapsed aonth: {} ns", aonth_now.elapsed().as_nanos());
 
+        let permutate_vec_now = Instant::now();
         // m''[1]...m''[n] <- PEp3(m'[1]...m'[n])
-        let m_2 = permutate_vec(&p3, &m_1[..n].to_vec());
+        let m_2: Vec<&[u8; 16]> = permutate_vec(&p3, &m_1[..n]);
+        println!(
+            "Elapsed permutate: {} ns",
+            permutate_vec_now.elapsed().as_nanos()
+        );
 
+        let test = Instant::now();
         // c[0] <- PEp1(m'[n+1][1...l]) xor PEp2(iv[i...l])
         let mut c: Vec<[u8; 16]> = vec![[0; 16]; n + 1];
         c[0] = xor(&permutate(&p1, &(m_1[n])), &permutate(&p2, &iv));
+        println!("Elapsed 3: {} ns", test.elapsed().as_nanos());
 
+        let test2 = Instant::now();
         // for i = i to n
         for i in 0..n {
             // c[1] <- PEp1(m''[i][i...l]) xor PEp2(c[i-1][1...l])
             c[i + 1] = xor(&permutate(&p1, &m_2[i]), &permutate(&p2, &c[i]))
         }
+        println!("Elapsed 4: {} ns", test2.elapsed().as_nanos());
 
         (iv, Blocks::new(c))
     }
@@ -232,7 +246,7 @@ mod proxy_reencryption_test {
         ]);
 
         // let m = vec![[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]];
-        let (iv, c) = ProxyReencryption::encryption(&k1, &k2, &k3, ctr, m.clone());
+        let (iv, c) = ProxyReencryption::encryption(&k1, &k2, &k3, ctr, &m);
         let m_1 = ProxyReencryption::decryption(&k1, &k2, &k3, ctr, &iv, c);
         assert_eq!(
             m.remove_padding().expect("Failed to unpad m"),
@@ -266,7 +280,7 @@ mod proxy_reencryption_test {
             ],
         ]);
 
-        let (iv, c) = ProxyReencryption::encryption(&k1, &k2, &k3, ctr, m.clone());
+        let (iv, c) = ProxyReencryption::encryption(&k1, &k2, &k3, ctr, &m);
         let (ck1, k2, k2_1, ck3, k1_1, k3_1) =
             ProxyReencryption::reencryption_key_generator(k1, k2, k3, m.blocks.len());
         let (iv, c_2) = ProxyReencryption::reencryption(ck1, &k2, &k2_1, ck3, &iv, c);

@@ -20,12 +20,12 @@ fn main() -> io::Result<()> {
 
     let ctr = 10;
 
-    let (iv, c) = ProxyReencryption::encryption(&k1, &k2, &k3, ctr, plaintext);
+    let (iv, c) = ProxyReencryption::encryption(&k1, &k2, &k3, ctr, &plaintext);
     let decrypted = ProxyReencryption::decryption(&k1, &k2, &k3, ctr, &iv, c).remove_padding()?;
 
     IOHelper::write_slice_to_file(
         &decrypted,
-        "/workspaces/proxy-reencryption/example/new_ciphertext",
+        "/workspaces/proxy-reencryption/example/new_plaintext",
     )
 }
 

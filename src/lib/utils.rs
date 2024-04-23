@@ -12,20 +12,29 @@ pub fn hash(x: &[u8]) -> [u8; 16] {
     digest
 }
 
+// pub fn xor<const N: usize>(a: &[u8; N], b: &[u8; N]) -> [u8; N] {
+//     let res = a
+//         .iter()
+//         .zip(b.iter())
+//         .map(|(x, y)| x ^ y)
+//         .collect::<Vec<u8>>()
+//         .try_into()
+//         .unwrap();
+//     res
+// }
+
 pub fn xor<const N: usize>(a: &[u8; N], b: &[u8; N]) -> [u8; N] {
-    let res = a
-        .iter()
-        .zip(b.iter())
-        .map(|(x, y)| x ^ y)
-        .collect::<Vec<u8>>()
-        .try_into()
-        .unwrap();
+    let mut res = [0u8; N];
+    for i in 0..N {
+        res[i] = a[i] ^ b[i];
+    }
     res
 }
 
-pub fn encrypt(plaintext: u8, key: &[u8; 16]) -> [u8; 16] {
+pub fn encrypt(plaintext: u16, key: &[u8; 16]) -> [u8; 16] {
     let mut longer_bytes = [0u8; 16];
-    longer_bytes[longer_bytes.len() - 1] = plaintext;
+    longer_bytes[longer_bytes.len() - 1] = (plaintext >> 8) as u8;
+    longer_bytes[longer_bytes.len() - 2] = (plaintext & 0xFF) as u8;
 
     let mut block: GenericArray<u8, U16> = GenericArray::from(longer_bytes);
     let key = GenericArray::from_slice(key);

@@ -4,10 +4,11 @@ pub fn e_aonth(ctr: u8, m: &Vec<[u8; 16]>) -> Vec<[u8; 16]> {
     let n = m.len();
     let k_1 = new_random_arr::<16>();
 
-    let mut x: Vec<[u8; 16]> = vec![[0; 16]; n];
-    for i in 0..n {
-        x[i] = xor(&m[i], &encrypt(ctr + i as u8, &k_1));
-    }
+    let x: Vec<[u8; 16]> = m
+        .iter()
+        .enumerate()
+        .map(|(i, block)| xor(block, &encrypt(ctr as u16 + i as u16, &k_1)))
+        .collect();
 
     let mut m_1 = vec![[0; 16]; n + 1];
     let x_alloc: Vec<u8> = x.iter().flatten().cloned().collect();
@@ -37,7 +38,7 @@ pub fn d_aonth(ctr: u8, m_1: &Vec<[u8; 16]>) -> Vec<[u8; 16]> {
 
     let mut m = vec![[0; 16]; n];
     for i in 0..n {
-        m[i] = xor(&x[i], &encrypt(ctr + i as u8, &k_1));
+        m[i] = xor(&x[i], &encrypt(ctr as u16 + i as u16, &k_1));
     }
 
     m
