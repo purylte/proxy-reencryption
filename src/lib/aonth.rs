@@ -1,6 +1,6 @@
 use crate::utils::{encrypt, hash, new_random_arr, xor};
 
-pub fn e_aonth(ctr: u8, m: &Vec<[u8; 16]>) -> Vec<[u8; 16]> {
+pub fn e_aonth(ctr: u64, m: &Vec<[u8; 16]>) -> Vec<[u8; 16]> {
     let n = m.len();
     let k_1 = new_random_arr::<16>();
 
@@ -14,22 +14,20 @@ pub fn e_aonth(ctr: u8, m: &Vec<[u8; 16]>) -> Vec<[u8; 16]> {
     let x_alloc: Vec<u8> = x.iter().flatten().cloned().collect();
     m_1[n] = xor(&k_1, &hash(&x_alloc));
 
-    let mut ctr_bytes = [0u8; 16];
     for i in 0..n {
-        ctr_bytes[15] = ctr + i as u8;
+        let ctr_bytes = (ctr as u128 + i as u128).to_be_bytes();
         m_1[i] = xor(&x[i], &hash(&xor(&m_1[n], &ctr_bytes)))
     }
 
     m_1
 }
 
-pub fn d_aonth(ctr: u8, m_1: &Vec<[u8; 16]>) -> Vec<[u8; 16]> {
+pub fn d_aonth(ctr: u64, m_1: &Vec<[u8; 16]>) -> Vec<[u8; 16]> {
     let n = m_1.len() - 1;
     let mut x = vec![[0; 16]; n];
-    let mut ctr_bytes = [0u8; 16];
 
     for i in 0..n {
-        ctr_bytes[15] = ctr + i as u8;
+        let ctr_bytes = (ctr as u128 + i as u128).to_be_bytes();
         x[i] = xor(&m_1[i], &hash(&xor(&m_1[n], &ctr_bytes)))
     }
 

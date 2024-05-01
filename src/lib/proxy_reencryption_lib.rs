@@ -16,7 +16,7 @@ impl ProxyReencryption {
         k1: &Key<16>,
         k2: &Key<16>,
         k3: &Key<16>,
-        ctr: u8,
+        ctr: u64,
         m: &Blocks,
     ) -> ([u8; 16], Blocks) {
         let n = m.blocks.len();
@@ -50,7 +50,7 @@ impl ProxyReencryption {
         k1: &Key<16>,
         k2: &Key<16>,
         k3: &Key<16>,
-        ctr: u8,
+        ctr: u64,
         iv: &[u8; 16],
         c: Blocks,
     ) -> Blocks {
@@ -179,6 +179,22 @@ impl Blocks {
         padded_data.extend(vec![padding_value as u8; padding_value]);
 
         let blocks = padded_data
+            .chunks(block_size)
+            .map(|chunk| {
+                let mut array = [0u8; 16];
+                array.copy_from_slice(chunk);
+                array
+            })
+            .collect();
+
+        Self { blocks }
+    }
+
+    pub fn from_vec_no_pad(data: Vec<u8>) -> Self {
+        let block_size = 16;
+        let padding_needed = (block_size - (data.len() % block_size)) % block_size;
+        assert_eq!(padding_needed, 0, "Invalid ciphertext length");
+        let blocks = data
             .chunks(block_size)
             .map(|chunk| {
                 let mut array = [0u8; 16];
