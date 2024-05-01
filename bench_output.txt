@@ -1,0 +1,494 @@
+    Finished bench [optimized] target(s) in 0.02s
+     Running unittests src/lib/lib.rs (target/release/deps/proxy_reencryption_lib-c5201d97163c1a0c)
+
+running 9 tests
+test aonth::aonth_tests::symmetric_tests ... ignored
+test key_generator::aonth_tests::pg_1_test ... ignored
+test permutation::permutation_tests::correctness_check ... ignored
+test permutation::permutation_tests::find_conversion_key_test ... ignored
+test permutation::permutation_tests::symmetric_tests ... ignored
+test proxy_reencryption_lib::proxy_reencryption_test::encrypt_symmetric_tests ... ignored
+test proxy_reencryption_lib::proxy_reencryption_test::pad_tests ... ignored
+test proxy_reencryption_lib::proxy_reencryption_test::reencryption_tests ... ignored
+test utils::tools_test::hash_correctness ... ignored
+
+test result: ok. 0 passed; 0 failed; 9 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin.rs (target/release/deps/proxy_reencryption-6606f8c71d702301)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running benches/benchmark_aes.rs (target/release/deps/benchmark_aes-bfe7b22c39b408a1)
+Gnuplot not found, using plotters backend
+Benchmarking aes_encryption
+Benchmarking aes_encryption: Warming up for 3.0000 s
+Benchmarking aes_encryption: Collecting 100 samples in estimated 5.0005 s (46M iterations)
+Benchmarking aes_encryption: Analyzing
+aes_encryption          time:   [66.338 ns 66.810 ns 67.358 ns]
+                        change: [-9.5257% -9.0224% -8.4545%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 7 outliers among 100 measurements (7.00%)
+  3 (3.00%) high mild
+  4 (4.00%) high severe
+
+Benchmarking aes_encryption #2
+Benchmarking aes_encryption #2: Warming up for 3.0000 s
+Benchmarking aes_encryption #2: Collecting 100 samples in estimated 5.0001 s (23M iterations)
+Benchmarking aes_encryption #2: Analyzing
+aes_encryption #2       time:   [86.904 ns 87.100 ns 87.294 ns]
+                        change: [-28.771% -6.5869% +23.401%] (p = 0.74 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 100 measurements (2.00%)
+  1 (1.00%) high mild
+  1 (1.00%) high severe
+
+Benchmarking aes_encryption #3
+Benchmarking aes_encryption #3: Warming up for 3.0000 s
+Benchmarking aes_encryption #3: Collecting 100 samples in estimated 5.0012 s (3.3M iterations)
+Benchmarking aes_encryption #3: Analyzing
+aes_encryption #3       time:   [254.53 ns 256.56 ns 258.68 ns]
+                        change: [+0.4770% +1.3510% +2.1532%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 6 outliers among 100 measurements (6.00%)
+  4 (4.00%) high mild
+  2 (2.00%) high severe
+
+Benchmarking aes_encryption #4
+Benchmarking aes_encryption #4: Warming up for 3.0000 s
+Benchmarking aes_encryption #4: Collecting 100 samples in estimated 5.0278 s (359k iterations)
+Benchmarking aes_encryption #4: Analyzing
+aes_encryption #4       time:   [1.8454 µs 1.8649 µs 1.8869 µs]
+                        change: [+0.8396% +1.7851% +2.6983%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 3 outliers among 100 measurements (3.00%)
+  2 (2.00%) high mild
+  1 (1.00%) high severe
+
+Benchmarking aes_encryption #5
+Benchmarking aes_encryption #5: Warming up for 3.0000 s
+Benchmarking aes_encryption #5: Collecting 100 samples in estimated 5.1949 s (35k iterations)
+Benchmarking aes_encryption #5: Analyzing
+aes_encryption #5       time:   [17.887 µs 18.108 µs 18.335 µs]
+                        change: [+0.4469% +1.3936% +2.4366%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Found 10 outliers among 100 measurements (10.00%)
+  7 (7.00%) high mild
+  3 (3.00%) high severe
+
+Benchmarking aes_encryption #6
+Benchmarking aes_encryption #6: Warming up for 3.0000 s
+
+Warning: Unable to complete 100 samples in 5.0s. You may wish to increase target time to 7.0s, enable flat sampling, or reduce sample count to 50.
+Benchmarking aes_encryption #6: Collecting 100 samples in estimated 7.0208 s (5050 iterations)
+Benchmarking aes_encryption #6: Analyzing
+aes_encryption #6       time:   [185.84 µs 187.00 µs 188.02 µs]
+                        change: [+0.3589% +1.7029% +3.2571%] (p = 0.02 < 0.05)
+                        Change within noise threshold.
+Found 2 outliers among 100 measurements (2.00%)
+  2 (2.00%) high mild
+
+Benchmarking aes_reencryption
+Benchmarking aes_reencryption: Warming up for 3.0000 s
+Benchmarking aes_reencryption: Collecting 100 samples in estimated 5.0005 s (31M iterations)
+Benchmarking aes_reencryption: Analyzing
+aes_reencryption        time:   [110.77 ns 111.02 ns 111.33 ns]
+                        change: [-0.5444% -0.1025% +0.3028%] (p = 0.65 > 0.05)
+                        No change in performance detected.
+Found 13 outliers among 100 measurements (13.00%)
+  8 (8.00%) high mild
+  5 (5.00%) high severe
+
+Benchmarking aes_reencryption #2
+Benchmarking aes_reencryption #2: Warming up for 3.0000 s
+Benchmarking aes_reencryption #2: Collecting 100 samples in estimated 5.0010 s (18M iterations)
+Benchmarking aes_reencryption #2: Analyzing
+aes_reencryption #2     time:   [147.49 ns 147.90 ns 148.41 ns]
+                        change: [-25.711% +0.1672% +34.190%] (p = 0.94 > 0.05)
+                        No change in performance detected.
+Found 10 outliers among 100 measurements (10.00%)
+  1 (1.00%) low mild
+  3 (3.00%) high mild
+  6 (6.00%) high severe
+
+Benchmarking aes_reencryption #3
+Benchmarking aes_reencryption #3: Warming up for 3.0000 s
+Benchmarking aes_reencryption #3: Collecting 100 samples in estimated 5.0008 s (2.8M iterations)
+Benchmarking aes_reencryption #3: Analyzing
+aes_reencryption #3     time:   [523.71 ns 525.30 ns 526.98 ns]
+                        change: [+0.8756% +1.2510% +1.6273%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 4 outliers among 100 measurements (4.00%)
+  4 (4.00%) high mild
+
+Benchmarking aes_reencryption #4
+Benchmarking aes_reencryption #4: Warming up for 3.0000 s
+Benchmarking aes_reencryption #4: Collecting 100 samples in estimated 5.0636 s (313k iterations)
+Benchmarking aes_reencryption #4: Analyzing
+aes_reencryption #4     time:   [4.0790 µs 4.0990 µs 4.1178 µs]
+                        change: [-0.2000% +0.3216% +0.8390%] (p = 0.23 > 0.05)
+                        No change in performance detected.
+Found 10 outliers among 100 measurements (10.00%)
+  9 (9.00%) high mild
+  1 (1.00%) high severe
+
+Benchmarking aes_reencryption #5
+Benchmarking aes_reencryption #5: Warming up for 3.0000 s
+Benchmarking aes_reencryption #5: Collecting 100 samples in estimated 5.7322 s (35k iterations)
+Benchmarking aes_reencryption #5: Analyzing
+aes_reencryption #5     time:   [39.976 µs 40.182 µs 40.391 µs]
+                        change: [-0.0964% +0.3620% +0.8588%] (p = 0.14 > 0.05)
+                        No change in performance detected.
+Found 3 outliers among 100 measurements (3.00%)
+  1 (1.00%) high mild
+  2 (2.00%) high severe
+
+Benchmarking aes_reencryption #6
+Benchmarking aes_reencryption #6: Warming up for 3.0000 s
+
+Warning: Unable to complete 100 samples in 5.0s. You may wish to increase target time to 7.5s, enable flat sampling, or reduce sample count to 50.
+Benchmarking aes_reencryption #6: Collecting 100 samples in estimated 7.4729 s (5050 iterations)
+Benchmarking aes_reencryption #6: Analyzing
+aes_reencryption #6     time:   [406.16 µs 408.44 µs 410.81 µs]
+                        change: [-0.1736% +0.5326% +1.3169%] (p = 0.15 > 0.05)
+                        No change in performance detected.
+Found 4 outliers among 100 measurements (4.00%)
+  4 (4.00%) high mild
+
+Benchmarking aes_decryption
+Benchmarking aes_decryption: Warming up for 3.0000 s
+Benchmarking aes_decryption: Collecting 100 samples in estimated 5.0001 s (47M iterations)
+Benchmarking aes_decryption: Analyzing
+aes_decryption          time:   [67.314 ns 67.405 ns 67.500 ns]
+                        change: [+5.8770% +6.3638% +6.8406%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 9 outliers among 100 measurements (9.00%)
+  1 (1.00%) low severe
+  6 (6.00%) high mild
+  2 (2.00%) high severe
+
+Benchmarking aes_decryption #2
+Benchmarking aes_decryption #2: Warming up for 3.0000 s
+Benchmarking aes_decryption #2: Collecting 100 samples in estimated 5.0003 s (24M iterations)
+Benchmarking aes_decryption #2: Analyzing
+aes_decryption #2       time:   [84.632 ns 84.818 ns 85.013 ns]
+                        change: [-19.831% +4.7025% +36.183%] (p = 0.79 > 0.05)
+                        No change in performance detected.
+Found 6 outliers among 100 measurements (6.00%)
+  3 (3.00%) high mild
+  3 (3.00%) high severe
+
+Benchmarking aes_decryption #3
+Benchmarking aes_decryption #3: Warming up for 3.0000 s
+Benchmarking aes_decryption #3: Collecting 100 samples in estimated 5.0031 s (3.2M iterations)
+Benchmarking aes_decryption #3: Analyzing
+aes_decryption #3       time:   [246.37 ns 247.02 ns 247.76 ns]
+                        change: [-4.9579% -4.1652% -3.3627%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 12 outliers among 100 measurements (12.00%)
+  4 (4.00%) low mild
+  3 (3.00%) high mild
+  5 (5.00%) high severe
+
+Benchmarking aes_decryption #4
+Benchmarking aes_decryption #4: Warming up for 3.0000 s
+Benchmarking aes_decryption #4: Collecting 100 samples in estimated 5.0337 s (369k iterations)
+Benchmarking aes_decryption #4: Analyzing
+aes_decryption #4       time:   [1.7854 µs 1.8006 µs 1.8162 µs]
+                        change: [-1.7211% -1.0455% -0.3275%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 8 outliers among 100 measurements (8.00%)
+  5 (5.00%) high mild
+  3 (3.00%) high severe
+
+Benchmarking aes_decryption #5
+Benchmarking aes_decryption #5: Warming up for 3.0000 s
+Benchmarking aes_decryption #5: Collecting 100 samples in estimated 5.0053 s (35k iterations)
+Benchmarking aes_decryption #5: Analyzing
+aes_decryption #5       time:   [17.666 µs 17.786 µs 17.907 µs]
+                        change: [-2.9672% -1.9291% -0.9179%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 3 outliers among 100 measurements (3.00%)
+  3 (3.00%) high mild
+
+Benchmarking aes_decryption #6
+Benchmarking aes_decryption #6: Warming up for 3.0000 s
+
+Warning: Unable to complete 100 samples in 5.0s. You may wish to increase target time to 7.1s, enable flat sampling, or reduce sample count to 50.
+Benchmarking aes_decryption #6: Collecting 100 samples in estimated 7.1219 s (5050 iterations)
+Benchmarking aes_decryption #6: Analyzing
+aes_decryption #6       time:   [184.40 µs 186.09 µs 187.63 µs]
+                        change: [-1.8765% -0.5039% +0.9042%] (p = 0.48 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 100 measurements (1.00%)
+  1 (1.00%) high mild
+
+     Running benches/benchmark_pre.rs (target/release/deps/benchmark_pre-113b033c9dcc246d)
+Gnuplot not found, using plotters backend
+Benchmarking encryption
+Benchmarking encryption: Warming up for 3.0000 s
+Benchmarking encryption: Collecting 100 samples in estimated 5.0068 s (2.4M iterations)
+Benchmarking encryption: Analyzing
+encryption              time:   [2.0169 µs 2.0199 µs 2.0229 µs]
+                        change: [+1.6059% +1.8448% +2.0665%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+
+Benchmarking encryption #2
+Benchmarking encryption #2: Warming up for 3.0000 s
+Benchmarking encryption #2: Collecting 100 samples in estimated 5.0140 s (1.4M iterations)
+Benchmarking encryption #2: Analyzing
+encryption #2           time:   [3.4101 µs 3.4144 µs 3.4187 µs]
+                        change: [+0.1941% +0.4762% +0.8286%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 4 outliers among 100 measurements (4.00%)
+  1 (1.00%) high mild
+  3 (3.00%) high severe
+
+Benchmarking encryption #3
+Benchmarking encryption #3: Warming up for 3.0000 s
+Benchmarking encryption #3: Collecting 100 samples in estimated 5.0390 s (252k iterations)
+Benchmarking encryption #3: Analyzing
+encryption #3           time:   [18.246 µs 18.258 µs 18.270 µs]
+                        change: [-14.020% -13.846% -13.659%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 4 outliers among 100 measurements (4.00%)
+  3 (3.00%) high mild
+  1 (1.00%) high severe
+
+Benchmarking encryption #4
+Benchmarking encryption #4: Warming up for 3.0000 s
+Benchmarking encryption #4: Collecting 100 samples in estimated 5.6316 s (30k iterations)
+Benchmarking encryption #4: Analyzing
+encryption #4           time:   [171.95 µs 172.19 µs 172.49 µs]
+                        change: [-12.982% -12.520% -11.859%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 14 outliers among 100 measurements (14.00%)
+  5 (5.00%) high mild
+  9 (9.00%) high severe
+
+Benchmarking encryption #5
+Benchmarking encryption #5: Warming up for 3.0000 s
+
+Warning: Unable to complete 100 samples in 5.0s. You may wish to increase target time to 9.6s, enable flat sampling, or reduce sample count to 50.
+Benchmarking encryption #5: Collecting 100 samples in estimated 9.6275 s (5050 iterations)
+Benchmarking encryption #5: Analyzing
+encryption #5           time:   [1.7737 ms 1.7746 ms 1.7755 ms]
+                        change: [-18.490% -18.297% -18.079%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 12 outliers among 100 measurements (12.00%)
+  1 (1.00%) low mild
+  11 (11.00%) high severe
+
+Benchmarking encryption #6
+Benchmarking encryption #6: Warming up for 3.0000 s
+Benchmarking encryption #6: Collecting 100 samples in estimated 6.2521 s (300 iterations)
+Benchmarking encryption #6: Analyzing
+encryption #6           time:   [19.647 ms 19.695 ms 19.746 ms]
+                        change: [-23.552% -23.321% -23.104%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 3 outliers among 100 measurements (3.00%)
+  3 (3.00%) high mild
+
+Benchmarking decryption
+Benchmarking decryption: Warming up for 3.0000 s
+Benchmarking decryption: Collecting 100 samples in estimated 5.0056 s (2.6M iterations)
+Benchmarking decryption: Analyzing
+decryption              time:   [1.9718 µs 1.9750 µs 1.9788 µs]
+                        change: [-2.0402% -1.7580% -1.4581%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 4 outliers among 100 measurements (4.00%)
+  3 (3.00%) high mild
+  1 (1.00%) high severe
+
+Benchmarking decryption #2
+Benchmarking decryption #2: Warming up for 3.0000 s
+Benchmarking decryption #2: Collecting 100 samples in estimated 5.0018 s (1.5M iterations)
+Benchmarking decryption #2: Analyzing
+decryption #2           time:   [3.3777 µs 3.3925 µs 3.4062 µs]
+                        change: [-2.0090% -1.1993% -0.5494%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 13 outliers among 100 measurements (13.00%)
+  8 (8.00%) high mild
+  5 (5.00%) high severe
+
+Benchmarking decryption #3
+Benchmarking decryption #3: Warming up for 3.0000 s
+Benchmarking decryption #3: Collecting 100 samples in estimated 5.0544 s (263k iterations)
+Benchmarking decryption #3: Analyzing
+decryption #3           time:   [18.379 µs 18.405 µs 18.433 µs]
+                        change: [-9.5860% -9.3820% -9.1775%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 3 outliers among 100 measurements (3.00%)
+  2 (2.00%) high mild
+  1 (1.00%) high severe
+
+Benchmarking decryption #4
+Benchmarking decryption #4: Warming up for 3.0000 s
+Benchmarking decryption #4: Collecting 100 samples in estimated 5.4609 s (30k iterations)
+Benchmarking decryption #4: Analyzing
+decryption #4           time:   [173.61 µs 173.89 µs 174.16 µs]
+                        change: [-14.725% -14.109% -13.578%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 100 measurements (2.00%)
+  2 (2.00%) high mild
+
+Benchmarking decryption #5
+Benchmarking decryption #5: Warming up for 3.0000 s
+
+Warning: Unable to complete 100 samples in 5.0s. You may wish to increase target time to 9.2s, enable flat sampling, or reduce sample count to 50.
+Benchmarking decryption #5: Collecting 100 samples in estimated 9.2430 s (5050 iterations)
+Benchmarking decryption #5: Analyzing
+decryption #5           time:   [1.8031 ms 1.8048 ms 1.8066 ms]
+                        change: [-17.031% -16.811% -16.548%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 3 outliers among 100 measurements (3.00%)
+  1 (1.00%) high mild
+  2 (2.00%) high severe
+
+Benchmarking decryption #6
+Benchmarking decryption #6: Warming up for 3.0000 s
+Benchmarking decryption #6: Collecting 100 samples in estimated 5.9620 s (300 iterations)
+Benchmarking decryption #6: Analyzing
+decryption #6           time:   [19.141 ms 19.204 ms 19.281 ms]
+                        change: [-24.317% -24.045% -23.736%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 5 outliers among 100 measurements (5.00%)
+  3 (3.00%) high mild
+  2 (2.00%) high severe
+
+Benchmarking reencryption
+Benchmarking reencryption: Warming up for 3.0000 s
+Benchmarking reencryption: Collecting 100 samples in estimated 5.0034 s (2.5M iterations)
+Benchmarking reencryption: Analyzing
+reencryption            time:   [1.6440 µs 1.6491 µs 1.6553 µs]
+                        change: [-9.0926% -7.9788% -6.8776%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 5 outliers among 100 measurements (5.00%)
+  2 (2.00%) high mild
+  3 (3.00%) high severe
+
+Benchmarking reencryption #2
+Benchmarking reencryption #2: Warming up for 3.0000 s
+Benchmarking reencryption #2: Collecting 100 samples in estimated 5.0000 s (2.0M iterations)
+Benchmarking reencryption #2: Analyzing
+reencryption #2         time:   [1.9002 µs 1.9045 µs 1.9103 µs]
+                        change: [-10.074% -7.8514% -4.0039%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 8 outliers among 100 measurements (8.00%)
+  1 (1.00%) low mild
+  2 (2.00%) high mild
+  5 (5.00%) high severe
+
+Benchmarking reencryption #3
+Benchmarking reencryption #3: Warming up for 3.0000 s
+Benchmarking reencryption #3: Collecting 100 samples in estimated 5.0288 s (737k iterations)
+Benchmarking reencryption #3: Analyzing
+reencryption #3         time:   [4.4610 µs 4.4706 µs 4.4848 µs]
+                        change: [-4.4286% -4.0784% -3.7084%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 7 outliers among 100 measurements (7.00%)
+  2 (2.00%) high mild
+  5 (5.00%) high severe
+
+Benchmarking reencryption #4
+Benchmarking reencryption #4: Warming up for 3.0000 s
+Benchmarking reencryption #4: Collecting 100 samples in estimated 5.0396 s (106k iterations)
+Benchmarking reencryption #4: Analyzing
+reencryption #4         time:   [29.583 µs 29.667 µs 29.751 µs]
+                        change: [-5.2743% -0.0665% +4.2606%] (p = 0.96 > 0.05)
+                        No change in performance detected.
+Found 11 outliers among 100 measurements (11.00%)
+  6 (6.00%) high mild
+  5 (5.00%) high severe
+
+Benchmarking reencryption #5
+Benchmarking reencryption #5: Warming up for 3.0000 s
+Benchmarking reencryption #5: Collecting 100 samples in estimated 5.2066 s (10k iterations)
+Benchmarking reencryption #5: Analyzing
+reencryption #5         time:   [282.60 µs 283.33 µs 284.26 µs]
+                        change: [+0.6491% +1.1482% +1.8259%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 12 outliers among 100 measurements (12.00%)
+  7 (7.00%) high mild
+  5 (5.00%) high severe
+
+Benchmarking reencryption #6
+Benchmarking reencryption #6: Warming up for 3.0000 s
+Benchmarking reencryption #6: Collecting 100 samples in estimated 5.1851 s (1000 iterations)
+Benchmarking reencryption #6: Analyzing
+reencryption #6         time:   [2.8198 ms 2.8226 ms 2.8258 ms]
+                        change: [+1.2142% +1.3513% +1.5044%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 8 outliers among 100 measurements (8.00%)
+  5 (5.00%) high mild
+  3 (3.00%) high severe
+
+Benchmarking generate_reencryption_key
+Benchmarking generate_reencryption_key: Warming up for 3.0000 s
+Benchmarking generate_reencryption_key: Collecting 100 samples in estimated 5.0056 s (1.3M iterations)
+Benchmarking generate_reencryption_key: Analyzing
+generate_reencryption_key
+                        time:   [3.7270 µs 3.7315 µs 3.7363 µs]
+                        change: [-2.9426% -2.7525% -2.5707%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 4 outliers among 100 measurements (4.00%)
+  2 (2.00%) high mild
+  2 (2.00%) high severe
+
+Benchmarking generate_reencryption_key #2
+Benchmarking generate_reencryption_key #2: Warming up for 3.0000 s
+Benchmarking generate_reencryption_key #2: Collecting 100 samples in estimated 5.0160 s (1000k iterations)
+Benchmarking generate_reencryption_key #2: Analyzing
+generate_reencryption_key #2
+                        time:   [4.8236 µs 4.8366 µs 4.8490 µs]
+                        change: [-2.7062% -2.3913% -2.0783%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 100 measurements (2.00%)
+  2 (2.00%) high mild
+
+Benchmarking generate_reencryption_key #3
+Benchmarking generate_reencryption_key #3: Warming up for 3.0000 s
+Benchmarking generate_reencryption_key #3: Collecting 100 samples in estimated 5.0204 s (263k iterations)
+Benchmarking generate_reencryption_key #3: Analyzing
+generate_reencryption_key #3
+                        time:   [18.494 µs 18.517 µs 18.541 µs]
+                        change: [-11.238% -10.945% -10.672%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 3 outliers among 100 measurements (3.00%)
+  3 (3.00%) high mild
+
+Benchmarking generate_reencryption_key #4
+Benchmarking generate_reencryption_key #4: Warming up for 3.0000 s
+Benchmarking generate_reencryption_key #4: Collecting 100 samples in estimated 5.5118 s (30k iterations)
+Benchmarking generate_reencryption_key #4: Analyzing
+generate_reencryption_key #4
+                        time:   [172.98 µs 173.26 µs 173.60 µs]
+                        change: [-19.206% -18.938% -18.665%] (p = 0.00 < 0.05)
+                        Performance has improved.
+
+Benchmarking generate_reencryption_key #5
+Benchmarking generate_reencryption_key #5: Warming up for 3.0000 s
+
+Warning: Unable to complete 100 samples in 5.0s. You may wish to increase target time to 9.8s, enable flat sampling, or reduce sample count to 50.
+Benchmarking generate_reencryption_key #5: Collecting 100 samples in estimated 9.7574 s (5050 iterations)
+Benchmarking generate_reencryption_key #5: Analyzing
+generate_reencryption_key #5
+                        time:   [1.8895 ms 1.8925 ms 1.8961 ms]
+                        change: [-27.932% -27.650% -27.242%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 9 outliers among 100 measurements (9.00%)
+  8 (8.00%) high mild
+  1 (1.00%) high severe
+
+Benchmarking generate_reencryption_key #6
+Benchmarking generate_reencryption_key #6: Warming up for 3.0000 s
+Benchmarking generate_reencryption_key #6: Collecting 100 samples in estimated 6.7740 s (300 iterations)
+Benchmarking generate_reencryption_key #6: Analyzing
+generate_reencryption_key #6
+                        time:   [22.648 ms 22.713 ms 22.782 ms]
+                        change: [-34.878% -34.649% -34.420%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 100 measurements (2.00%)
+  2 (2.00%) high mild
+

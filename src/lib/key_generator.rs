@@ -39,10 +39,18 @@ pub fn key_generator(
 
 pub fn pg(key: &Key<16>, n: usize) -> Vec<usize> {
     let mut p: Vec<usize> = (0..n).collect();
-    let mut tmp: Vec<[u8; 16]> = Vec::new();
-    for i in 0..n {
-        tmp.push(encrypt(i as u16, &key.key));
-    }
-    p.sort_by_key(|&x| tmp[(x) as usize]);
+    let tmp: Vec<[u8; 16]> = (0..n).map(|i| encrypt(i as u128, &key.key)).collect();
+    p.sort_unstable_by_key(|&x| tmp[(x) as usize]);
     p
+}
+
+#[cfg(test)]
+mod aonth_tests {
+    use crate::{key_generator::pg, proxy_reencryption_lib::Key};
+
+    #[test]
+    fn pg_1_test() {
+        let key = Key::new([1; 16]);
+        println!("{:?}", pg(&key, 20));
+    }
 }

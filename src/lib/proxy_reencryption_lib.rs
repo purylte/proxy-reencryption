@@ -1,7 +1,4 @@
-use std::{
-    io::{Error, ErrorKind, Result},
-    time::Instant,
-};
+use std::io::{Error, ErrorKind, Result};
 
 use crate::{
     aonth::{d_aonth, e_aonth},
@@ -30,32 +27,21 @@ impl ProxyReencryption {
         // iv <- {0,1}^l
         let iv: [u8; 16] = new_random_arr::<16>();
 
-        let aonth_now = Instant::now();
         // m'[1]...m'[n+1] <- E-AONTH(ctr, m[1]...m[n])
         let m_1: Vec<[u8; 16]> = e_aonth(ctr, &m.blocks);
-        println!("Elapsed aonth: {} ns", aonth_now.elapsed().as_nanos());
 
-        let permutate_vec_now = Instant::now();
         // m''[1]...m''[n] <- PEp3(m'[1]...m'[n])
         let m_2: Vec<&[u8; 16]> = permutate_vec(&p3, &m_1[..n]);
-        println!(
-            "Elapsed permutate: {} ns",
-            permutate_vec_now.elapsed().as_nanos()
-        );
 
-        let test = Instant::now();
         // c[0] <- PEp1(m'[n+1][1...l]) xor PEp2(iv[i...l])
         let mut c: Vec<[u8; 16]> = vec![[0; 16]; n + 1];
         c[0] = xor(&permutate(&p1, &(m_1[n])), &permutate(&p2, &iv));
-        println!("Elapsed 3: {} ns", test.elapsed().as_nanos());
 
-        let test2 = Instant::now();
         // for i = i to n
         for i in 0..n {
             // c[1] <- PEp1(m''[i][i...l]) xor PEp2(c[i-1][1...l])
             c[i + 1] = xor(&permutate(&p1, &m_2[i]), &permutate(&p2, &c[i]))
         }
-        println!("Elapsed 4: {} ns", test2.elapsed().as_nanos());
 
         (iv, Blocks::new(c))
     }
@@ -83,7 +69,6 @@ impl ProxyReencryption {
         let mut m_1: Vec<[u8; 16]> = Vec::with_capacity(n + 1);
         m_1.extend(depermutate_vec(&p3, &m_2));
         m_1.push(depermutate(&p1, &xor(&c.blocks[0], &permutate(&p2, &iv))));
-
         // m[1]...m[n] <- D-AONTH(ctr, m'[1]...m'[n+1])
         let m = d_aonth(ctr, &m_1);
         Blocks::new(m)
@@ -107,7 +92,10 @@ impl ProxyReencryption {
         // for i = n to 1
         for i in (0..n).rev() {
             // c'[i] <- PEck1(c[i] xor PEp2(c[i-1][i...l]))
-            c_1[i] = permutate(&ck1, &xor(&c.blocks[i + 1], &permutate(&p2, &c.blocks[i])))
+            let temp1 = &permutate(&p2, &c.blocks[i]);
+
+            let temp2 = &xor(&c.blocks[i + 1], temp1);
+            c_1[i] = permutate(&ck1, temp2);
         }
         // c''[1]...c''[n] <- PECK3(c'[1]...c'[n])
         // c''[0] = PECK1(c[0] xor PEP2(iv[1...l])) xor PEP2'(iv[1...l])
@@ -117,24 +105,31 @@ impl ProxyReencryption {
             &permutate(&p2_1, &iv),
         ));
         c_2.extend(permutate_vec(&ck3, &c_1));
-
-        let mut c_res = vec![[0; 16]; n + 1];
-        c_res[0] = c.blocks[0];
+        // let mut c_res = vec![[0; 16]; n + 1];
+        // c_res[0] = c.blocks[0];
+        // c_res[0] = c_2[0];
         // for i = 1 to n
-        for i in 1..=n {
+        for i in 0..n {
             // c[i] <- c''[i] xor PEp'2(c''[i-1][1...l])
-            c_res[i] = xor(&c_2[i], &permutate(&p2_1, &c_2[i - 1]));
+            c_2[i + 1] = xor(&c_2[i + 1], &permutate(&p2_1, &c_2[i]));
         }
 
-        (*iv, Blocks::new(c_res))
+        (*iv, Blocks::new(c_2))
     }
 
     pub fn reencryption_key_generator<'a>(
-        k1: Key<16>,
-        k2: Key<16>,
-        k3: Key<16>,
+        k1: &Key<16>,
+        k2: &'a Key<16>,
+        k3: &Key<16>,
         n: usize,
-    ) -> (Vec<usize>, Key<16>, Key<16>, Vec<usize>, Key<16>, Key<16>) {
+    ) -> (
+        Vec<usize>,
+        &'a Key<16>,
+        Key<16>,
+        Vec<usize>,
+        Key<16>,
+        Key<16>,
+    ) {
         let (p1, _p2, p3) = key_generator_with_keys(&k1, &k2, &k3, n);
         let (p1_1, _p2_1, p3_1, k1_1, k2_1, k3_1) = key_generator(n);
         let ck1 = find_conversion_key(&p1, &p1_1);
@@ -282,12 +277,11 @@ mod proxy_reencryption_test {
 
         let (iv, c) = ProxyReencryption::encryption(&k1, &k2, &k3, ctr, &m);
         let (ck1, k2, k2_1, ck3, k1_1, k3_1) =
-            ProxyReencryption::reencryption_key_generator(k1, k2, k3, m.blocks.len());
+            ProxyReencryption::reencryption_key_generator(&k1, &k2, &k3, m.blocks.len());
         let (iv, c_2) = ProxyReencryption::reencryption(ck1, &k2, &k2_1, ck3, &iv, c);
         let m_new = ProxyReencryption::decryption(&k1_1, &k2_1, &k3_1, ctr, &iv, c_2);
         assert_eq!(m.blocks, m_new.blocks);
     }
-
     #[test]
     fn pad_tests() {
         let input = vec![

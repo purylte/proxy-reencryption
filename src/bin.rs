@@ -21,10 +21,19 @@ fn main() -> io::Result<()> {
     let ctr = 10;
 
     let (iv, c) = ProxyReencryption::encryption(&k1, &k2, &k3, ctr, &plaintext);
-    let decrypted = ProxyReencryption::decryption(&k1, &k2, &k3, ctr, &iv, c).remove_padding()?;
+
+    let (ck1, k2, k2_1, ck3, k1_1, k3_1) =
+        ProxyReencryption::reencryption_key_generator(&k1, &k2, &k3, plaintext.blocks.len());
+
+    let (_, c_re) = ProxyReencryption::reencryption(ck1, &k2, &k2_1, ck3, &iv, c);
+
+    let decrypted = ProxyReencryption::decryption(&k1_1, &k2_1, &k3_1, ctr, &iv, c_re);
+
+    println!("{:?}", plaintext.blocks);
+    println!("{:?}", decrypted.blocks);
 
     IOHelper::write_slice_to_file(
-        &decrypted,
+        &decrypted.remove_padding()?,
         "/workspaces/proxy-reencryption/example/new_plaintext",
     )
 }
@@ -32,33 +41,9 @@ fn main() -> io::Result<()> {
 struct IOHelper;
 
 impl IOHelper {
-    fn print_slice(data: &[u8]) {
-        for byte in data {
-            print!("{:08b} ", byte);
-        }
-        println!();
-    }
-
-    fn print_vec(data: &Vec<[u8; 16]>) {
-        for slice in data {
-            for byte in slice {
-                print!("{:08b} ", byte);
-            }
-            println!();
-        }
-    }
-
     fn write_slice_to_file(data: &[u8], file_path: &str) -> io::Result<()> {
         let mut file = File::create(file_path)?;
         file.write_all(data)?;
-        Ok(())
-    }
-
-    fn write_vec_to_file(data: &Vec<[u8; 16]>, file_path: &str) -> io::Result<()> {
-        let mut file = File::create(file_path)?;
-        for slice in data {
-            file.write_all(slice)?;
-        }
         Ok(())
     }
 
