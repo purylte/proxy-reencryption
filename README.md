@@ -4,10 +4,11 @@ Implementation of proxy re-encryption scheme for symmetric key cryptography defi
 ## Example usage
 `cargo run -- -help`
 
+To create new key use `openssl rand -out <FILE> 48`
 ### Encryption
 ```
 cargo run -- encrypt \
-  --keys-path "./example/keys" \
+  --keys-path "./example/keys.key" \
   --counter 10 \
   --plaintext-path "./example/plaintext" \
   --iv-output-path "./example/iv" \
@@ -17,16 +18,16 @@ cargo run -- encrypt \
 ### Re-encryption
 ```
 cargo run -- reencrypt \
-  --keys-path "./example/keys" \
+  --keys-path "./example/keys.key" \
   --ciphertext-input-path "./example/ciphertext" \
   --iv-input-path "./example/iv" \
-  --new-keys-output-path "./example/keys_new" \
+  --new-keys-output-path "./example/keys_new.key" \
   --reencrypted-output-path "./example/reencrypted"
 ```
 ### Decryption
 ```
 cargo run -- decrypt \
-  --keys-path "./example/keys_new" \
+  --keys-path "./example/keys_new.key" \
   --counter 10 \
   --iv-input-path "./example/iv" \
   --ciphertext-input-path "./example/reencrypted" \

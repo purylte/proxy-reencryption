@@ -225,7 +225,7 @@ pub fn generate_reencryption_key_benchmark_100000(c: &mut Criterion) {
     });
 }
 
-fn encrypt_benchmark() -> impl FnMut((Key<16>, Key<16>, Key<16>, u8, Blocks)) {
+fn encrypt_benchmark() -> impl FnMut((Key<16>, Key<16>, Key<16>, u64, Blocks)) {
     |(k1, k2, k3, ctr, m)| {
         ProxyReencryption::encryption(
             black_box(&k1),
@@ -237,16 +237,16 @@ fn encrypt_benchmark() -> impl FnMut((Key<16>, Key<16>, Key<16>, u8, Blocks)) {
     }
 }
 
-fn encryption_input(blocks_length: usize) -> (Key<16>, Key<16>, Key<16>, u8, Blocks) {
+fn encryption_input(blocks_length: usize) -> (Key<16>, Key<16>, Key<16>, u64, Blocks) {
     let k1 = Key::new(new_random_arr());
     let k2 = Key::new(new_random_arr());
     let k3 = Key::new(new_random_arr());
-    let ctr: u8 = thread_rng().gen();
+    let ctr: u64 = thread_rng().gen();
     let m = Blocks::new((0..blocks_length).map(|_| new_random_arr()).collect());
     (k1, k2, k3, ctr, m)
 }
 
-fn decrypt_benchmark() -> impl FnMut((Key<16>, Key<16>, Key<16>, u8, [u8; 16], Blocks)) -> Blocks {
+fn decrypt_benchmark() -> impl FnMut((Key<16>, Key<16>, Key<16>, u64, [u8; 16], Blocks)) -> Blocks {
     |(k1, k2, k3, ctr, iv, c)| {
         ProxyReencryption::decryption(
             black_box(&k1),
@@ -259,11 +259,11 @@ fn decrypt_benchmark() -> impl FnMut((Key<16>, Key<16>, Key<16>, u8, [u8; 16], B
     }
 }
 
-fn decryption_input(blocks_length: usize) -> (Key<16>, Key<16>, Key<16>, u8, [u8; 16], Blocks) {
+fn decryption_input(blocks_length: usize) -> (Key<16>, Key<16>, Key<16>, u64, [u8; 16], Blocks) {
     let k1 = Key::new(new_random_arr());
     let k2 = Key::new(new_random_arr());
     let k3 = Key::new(new_random_arr());
-    let ctr: u8 = thread_rng().gen();
+    let ctr: u64 = thread_rng().gen();
     let iv = new_random_arr::<16>();
     let c = Blocks::new((0..blocks_length + 1).map(|_| new_random_arr()).collect());
     (k1, k2, k3, ctr, iv, c)
