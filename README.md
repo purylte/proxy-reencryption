@@ -33,3 +33,9 @@ cargo run -- decrypt \
   --ciphertext-input-path "./example/reencrypted" \
   --plaintext-output-path "./example/new_plaintext"
 ```
+
+### Benchmark
+```
+cargo bench --- benchmark_pre
+cargo bench --- benchmark_aes
+```
