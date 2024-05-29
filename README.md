@@ -3,12 +3,12 @@ Implementation of proxy re-encryption scheme for symmetric key cryptography defi
 
 ## Example usage
 To see the available commands and options, run:
-`cargo run -- -help`
+`./proxy_reencryption -help`
 
 To create new key use `openssl rand -out <FILE> 48`
 ### Encryption
 ```
-cargo run -- encrypt \
+./proxy_reencryption encrypt \
   --keys-path "./example/keys.key" \
   --counter 10 \
   --plaintext-path "./example/plaintext" \
@@ -18,7 +18,7 @@ cargo run -- encrypt \
 
 ### Re-encryption
 ```
-cargo run -- reencrypt \
+./proxy_reencryption reencrypt \
   --keys-path "./example/keys.key" \
   --ciphertext-input-path "./example/ciphertext" \
   --iv-input-path "./example/iv" \
@@ -27,7 +27,7 @@ cargo run -- reencrypt \
 ```
 ### Decryption
 ```
-cargo run -- decrypt \
+./proxy_reencryption decrypt \
   --keys-path "./example/keys_new.key" \
   --counter 10 \
   --iv-input-path "./example/iv" \
@@ -40,3 +40,13 @@ cargo run -- decrypt \
 cargo bench --- benchmark_pre
 cargo bench --- benchmark_aes
 ```
+
+## Library Documentation
+The documentation of proxy re-encryption library can be found [here](https://purylte.github.io/proxy-reencryption/proxy_reencryption_lib/index.html) 
+
+## License
+
+- [MIT License - purylte/proxy-reencryption]
+
+[MIT License - purylte/proxy-reencryption]: https://github.com/purylte/proxy-reencryption/blob/master/LICENSE
+
