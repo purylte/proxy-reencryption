@@ -33,7 +33,7 @@ jobs:
     - name: Build and Upload
       uses: taiki-e/upload-rust-binary-action@v1
       with:
-        bin: your_binary_name
+        bin: symreproxy
         target: ${{ matrix.target }}
         tar: unix
         zip: windows
