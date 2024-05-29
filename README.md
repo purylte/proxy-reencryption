@@ -1,4 +1,4 @@
-# Proxy Re-encryption CLI
+# Symmetric Proxy Re-encryption CLI
 Implementation of proxy re-encryption scheme for symmetric key cryptography defined in 10.1109/IWBIS.2017.8275110
 
 ## Example usage
