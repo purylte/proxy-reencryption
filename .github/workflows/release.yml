@@ -17,7 +17,7 @@ jobs:
         with:
           changelog: CHANGELOG.md
           title: $GITHUB_REF_NAME
-          branch: 'main|v[0-9]+'
+          branch: 'master|v[0-9]+'
           token: ${{ secrets.GITHUB_TOKEN }}
 
   upload-assets:
