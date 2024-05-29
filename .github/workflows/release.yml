@@ -16,7 +16,7 @@ jobs:
       - uses: taiki-e/create-gh-release-action@v1
         with:
           changelog: CHANGELOG.md
-          title: $version
+          title: $GITHUB_REF_NAME
           branch: 'main|v[0-9]+'
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -43,5 +43,21 @@ jobs:
         zip: windows
         token: ${{ secrets.GITHUB_TOKEN }}
 
-        name: Release
+    deploy-rustdoc:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@v3
 
+    - name: Build Documentation
+      run: cargo doc --lib --no-deps
+    - name: Setup index
+      run: cp ./doc_index.html ./target/doc/index.html
+
+    - name: Deploy
+      if: ${{ github.event_name == 'push' }}
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./target/doc
+        force_orphan: true
