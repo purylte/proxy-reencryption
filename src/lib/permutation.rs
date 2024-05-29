@@ -1,8 +1,20 @@
+//! This module provides functions for permuting and depermuting vectors and arrays.
+//!
+//! It includes four main functions: `permutate_vec` for permuting a vector, `depermutate_vec` for depermuting a vector, `permutate` for permuting an array, and `depermutate` for depermuting an array.
+//!
+//! The `find_conversion_key` function is used to find the conversion key between two permutations.
+
+/// Permutes a vector based on a permutation.
+///
+/// This function takes a permutation and a vector as input and returns a new vector with the elements permuted according to the permutation.
 pub fn permutate_vec<'a, T>(p: &[usize], x: &'a [T]) -> Vec<&'a T> {
     assert_eq!(p.len(), x.len());
     p.iter().map(|&index| &x[index]).collect()
 }
 
+/// Depermutes a vector based on a permutation.
+///
+/// This function takes a permutation and a vector as input and returns a new vector with the elements depermuted according to the permutation.
 pub fn depermutate_vec<T: Clone + Copy>(p: &Vec<usize>, x: &Vec<T>) -> Vec<T> {
     assert_eq!(p.len(), x.len());
 
@@ -13,6 +25,9 @@ pub fn depermutate_vec<T: Clone + Copy>(p: &Vec<usize>, x: &Vec<T>) -> Vec<T> {
     result
 }
 
+/// Finds the conversion key between two permutations.
+///
+/// This function takes two permutations as input and returns the conversion key between them.
 pub fn permutate<T: Copy, const N: usize>(p: &[usize], x: &[T; N]) -> [T; N] {
     assert_eq!(p.len(), x.len());
 
@@ -23,42 +38,15 @@ pub fn permutate<T: Copy, const N: usize>(p: &[usize], x: &[T; N]) -> [T; N] {
     result
 }
 
-// use std::mem::MaybeUninit;
-
-// pub fn permutate<T: Copy, const N: usize>(p: &[usize], x: &[T; N]) -> [T; N] {
-//     let mut result = [MaybeUninit::uninit(); N];
-//     for (i, &pi) in p.iter().enumerate() {
-//         unsafe {
-//             *result[i].as_mut_ptr() = x[pi];
-//         }
-//     }
-//     unsafe { std::mem::transmute_copy(&result) }
-// }
-
-pub fn depermutate<T: Clone + Copy, const N: usize>(p: &Vec<usize>, x: &[T; N]) -> [T; N] {
+pub fn depermutate<T: Copy, const N: usize>(p: &Vec<usize>, x: &[T; N]) -> [T; N] {
     assert_eq!(p.len(), x.len());
 
-    let mut result = [x[0].clone(); N];
+    let mut result = [x[0]; N];
     for i in 0..p.len() {
         result[p[i]] = x[i];
     }
     result
 }
-
-// pub fn find_conversion_key(pa: &Vec<usize>, pb: &Vec<usize>) -> Vec<usize> {
-//     assert_eq!(pa.len(), pb.len());
-//     let n = pa.len();
-//     let mut pc = vec![0; n];
-//     for i in 0..n {
-//         for j in 0..n {
-//             if pa[i] == pb[j] {
-//                 pc[j] = i;
-//                 break;
-//             }
-//         }
-//     }
-//     pc
-// }
 
 pub fn find_conversion_key(pa: &Vec<usize>, pb: &Vec<usize>) -> Vec<usize> {
     let length = pa.len();

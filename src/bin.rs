@@ -1,3 +1,7 @@
+//! This is the main entry point of the proxy re-encryption CLI.
+//!
+//! It uses the `clap` crate to parse command line arguments and provides three subcommands: `encrypt`, `decrypt`, and `reencrypt`.
+
 use clap::{arg, Command};
 use proxy_reencryption_lib::proxy_reencryption_lib::{Blocks, Key, ProxyReencryption};
 use std::fs::File;

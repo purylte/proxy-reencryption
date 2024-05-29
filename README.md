@@ -2,6 +2,7 @@
 Implementation of proxy re-encryption scheme for symmetric key cryptography defined in 10.1109/IWBIS.2017.8275110
 
 ## Example usage
+To see the available commands and options, run:
 `cargo run -- -help`
 
 To create new key use `openssl rand -out <FILE> 48`

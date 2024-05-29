@@ -24,10 +24,13 @@ fn decrypt_blocks(key: &[u8; 16], blocks: &mut Vec<Block>) {
 
 fn reencrypt_blocks(dec_key: &[u8; 16], enc_key: &[u8; 16], blocks: &mut Vec<Block>) {
     let dec_cipher = Aes128::new_from_slice(dec_key).unwrap();
-    let enc_cipher = Aes128::new_from_slice(enc_key).unwrap();
 
     for block in blocks.iter_mut() {
         dec_cipher.decrypt_block(block);
+    }
+
+    let enc_cipher = Aes128::new_from_slice(enc_key).unwrap();
+    for block in blocks.iter_mut() {
         enc_cipher.encrypt_block(block);
     }
 }

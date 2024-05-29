@@ -1,3 +1,5 @@
+//! This module provides an implementation of the symmetric proxy re-encryption.
+
 use std::io::{Error, ErrorKind, Result};
 
 use crate::{
@@ -7,11 +9,24 @@ use crate::{
     utils::{new_random_arr, xor},
 };
 
-// N: amount of block
-// L: block size in byte
+/// This struct represents a proxy re-encryption system.
 pub struct ProxyReencryption;
 
 impl ProxyReencryption {
+    /// Encrypts data using the proxy re-encryption scheme.
+    ///
+    /// # Arguments
+    ///
+    /// - `k1`: The first key.
+    /// - `k2`: The second key.
+    /// - `k3`: The third key.
+    /// - `ctr`: The counter.
+    /// - `m`: The data to encrypt.
+    ///
+    /// # Returns
+    ///
+    /// - `iv`: The initialization vector.
+    /// - `c`: The encrypted data.
     pub fn encryption(
         k1: &Key<16>,
         k2: &Key<16>,
@@ -46,6 +61,20 @@ impl ProxyReencryption {
         (iv, Blocks::new(c))
     }
 
+    /// Decrypts data using the proxy re-encryption scheme.
+    ///
+    /// # Arguments
+    ///
+    /// - `k1`: The first key.
+    /// - `k2`: The second key.
+    /// - `k3`: The third key.
+    /// - `ctr`: The counter.
+    /// - `iv`: The initialization vector.
+    /// - `c`: The encrypted data.
+    ///
+    /// # Returns
+    ///
+    /// - `m`: The decrypted data.
     pub fn decryption(
         k1: &Key<16>,
         k2: &Key<16>,
@@ -74,6 +103,21 @@ impl ProxyReencryption {
         Blocks::new(m)
     }
 
+    /// Re-encrypts data using the proxy re-encryption scheme.
+    ///
+    /// # Arguments
+    ///
+    /// - `ck1`: The conversion key for the first key.
+    /// - `k2`: The second key.
+    /// - `k2_1`: The second key for re-encryption.
+    /// - `ck3`: The conversion key for the third key.
+    /// - `iv`: The initialization vector.
+    /// - `c`: The encrypted data.
+    ///
+    /// # Returns
+    ///
+    /// - `iv`: The new initialization vector.
+    /// - `c`: The re-encrypted data.
     pub fn reencryption(
         ck1: Vec<usize>,
         k2: &Key<16>,
@@ -105,10 +149,6 @@ impl ProxyReencryption {
             &permutate(&p2_1, &iv),
         ));
         c_2.extend(permutate_vec(&ck3, &c_1));
-        // let mut c_res = vec![[0; 16]; n + 1];
-        // c_res[0] = c.blocks[0];
-        // c_res[0] = c_2[0];
-        // for i = 1 to n
         for i in 0..n {
             // c[i] <- c''[i] xor PEp'2(c''[i-1][1...l])
             c_2[i + 1] = xor(&c_2[i + 1], &permutate(&p2_1, &c_2[i]));
@@ -117,6 +157,23 @@ impl ProxyReencryption {
         (*iv, Blocks::new(c_2))
     }
 
+    /// Generates keys for re-encryption.
+    ///
+    /// # Arguments
+    ///
+    /// - `k1`: The first key.
+    /// - `k2`: The second key.
+    /// - `k3`: The third key.
+    /// - `n`: The number of blocks.
+    ///
+    /// # Returns
+    ///
+    /// - `ck1`: The conversion key for the first key.
+    /// - `k2`: The second key.
+    /// - `k2_1`: The second key for re-encryption.
+    /// - `ck3`: The conversion key for the third key.
+    /// - `k1_1`: The first key for re-encryption.
+    /// - `k3_1`: The third key for re-encryption.
     pub fn reencryption_key_generator<'a>(
         k1: &Key<16>,
         k2: &'a Key<16>,
@@ -139,15 +196,18 @@ impl ProxyReencryption {
     }
 }
 
+/// Represents a cryptographic key of a fixed size.
 pub struct Key<const N: usize> {
+    /// The actual key bytes.
     pub key: [u8; N],
 }
 
 impl<const N: usize> Key<N> {
+    /// Creates a new `Key` from a byte array.
     pub fn new(key: [u8; N]) -> Self {
         Self { key }
     }
-
+    /// Creates a new `Key` from a vector of bytes.
     pub fn from_vec(vec: Vec<u8>) -> Self {
         let key = vec
             .as_slice()
@@ -157,16 +217,20 @@ impl<const N: usize> Key<N> {
     }
 }
 
+/// Represents a collection of 16-byte blocks.
 #[derive(Clone)]
 pub struct Blocks {
+    /// The actual blocks.
     pub blocks: Vec<[u8; 16]>,
 }
 // use PKCS7 Padding
 impl Blocks {
+    /// Creates a new `Blocks` from a vector of 16-byte blocks.
     pub fn new(blocks: Vec<[u8; 16]>) -> Self {
         Self { blocks }
     }
 
+    /// Creates a new `Blocks` from a vector of bytes, applying PKCS#7 padding.
     pub fn from_vec(data: Vec<u8>) -> Self {
         let block_size = 16;
         let padding_needed = (block_size - (data.len() % block_size)) % block_size;
@@ -190,6 +254,7 @@ impl Blocks {
         Self { blocks }
     }
 
+    /// Creates a new `Blocks` from a vector of bytes without applying padding.
     pub fn from_vec_no_pad(data: Vec<u8>) -> Self {
         let block_size = 16;
         let padding_needed = (block_size - (data.len() % block_size)) % block_size;
@@ -205,7 +270,7 @@ impl Blocks {
 
         Self { blocks }
     }
-
+    /// Removes PKCS#7 padding from the blocks.
     pub fn remove_padding(&self) -> Result<Vec<u8>> {
         if let Some(last_block) = self.blocks.last() {
             let padding_value = last_block[15] as usize;

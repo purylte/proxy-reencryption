@@ -1,8 +1,17 @@
+//! This module provides functions for generating permutation keys and random keys.
+//!
+//! It includes two main functions: `key_generator_with_keys` for generating permutation keys based on three input keys and `key_generator` for generating random keys and permutation keys.
+//!
+//! The `pg` function is used to generate a permutation based on a key.
+
 use crate::{
     proxy_reencryption_lib::Key,
     utils::{encrypt, new_random_arr},
 };
 
+/// Generates permutation keys based on three input keys.
+///
+/// This function takes three input keys and a size `n` as input and returns three permutation keys.
 pub fn key_generator_with_keys(
     k1: &Key<16>,
     k2: &Key<16>,
@@ -16,6 +25,9 @@ pub fn key_generator_with_keys(
     (p1, p2, p3)
 }
 
+/// Generates random keys and permutation keys.
+///
+/// This function takes a key and a size `n` as input and returns a permutation of the numbers from 0 to `n-1`.
 pub fn key_generator(
     n: usize,
 ) -> (
@@ -37,6 +49,9 @@ pub fn key_generator(
     (p1, p2, p3, t_k1, t_k2, t_k3)
 }
 
+/// Generates a permutation based on a key.
+///
+/// This function takes a key and a size `n` as input and returns a permutation of the numbers from 0 to `n-1`.
 pub fn pg(key: &Key<16>, n: usize) -> Vec<usize> {
     let mut p: Vec<usize> = (0..n).collect();
     let tmp: Vec<[u8; 16]> = (0..n).map(|i| encrypt(i as u128, &key.key)).collect();

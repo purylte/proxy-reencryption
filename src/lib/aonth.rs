@@ -1,5 +1,14 @@
+//! This module provides functions for authenticated encryption and decryption using a variant of AONT (All-or-Nothing Transform) scheme.
+//!
+//! The AONTH scheme is a method for encrypting data in a way that ensures the integrity and confidentiality of the data.
+//!
+//! This module includes two main functions: `e_aonth` for encryption and `d_aonth` for decryption.
+
 use crate::utils::{encrypt, hash, new_random_arr, xor};
 
+/// Encrypts data using the AONTH scheme.
+///
+/// This function takes a counter value and a vector of 16-byte blocks as input and returns a new vector of encrypted blocks.
 pub fn e_aonth(ctr: u64, m: &Vec<[u8; 16]>) -> Vec<[u8; 16]> {
     let n = m.len();
     let k_1 = new_random_arr::<16>();
@@ -22,6 +31,9 @@ pub fn e_aonth(ctr: u64, m: &Vec<[u8; 16]>) -> Vec<[u8; 16]> {
     m_1
 }
 
+/// Decrypts data using the AONTH scheme.
+///
+/// This function takes a counter value and a vector of encrypted blocks as input and returns the original data.
 pub fn d_aonth(ctr: u64, m_1: &Vec<[u8; 16]>) -> Vec<[u8; 16]> {
     let n = m_1.len() - 1;
     let mut x = vec![[0; 16]; n];
