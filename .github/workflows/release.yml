@@ -43,7 +43,7 @@ jobs:
         zip: windows
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    deploy-rustdoc:
+  deploy-rustdoc:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout sources
