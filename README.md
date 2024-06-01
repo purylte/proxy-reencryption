@@ -16,19 +16,27 @@ To create new key use `openssl rand -out <FILE> 48`
   --ciphertext-output-path "./example/ciphertext"
 ```
 
+### Generate Re-encryption Key
+```
+./proxy_reencryption generate-key \
+  --keys-path "./example/keys.key" \
+  --plaintext-path "./example/plaintext" \
+  --reencryption-keys-output-path "./example/reencrypt_keys.key" \
+  --decryption-keys-output-path "./example/decrypt_keys.key"
+```
+
 ### Re-encryption
 ```
 ./proxy_reencryption reencrypt \
-  --keys-path "./example/keys.key" \
+  --keys-path "./example/reencrypt_keys.key" \
   --ciphertext-input-path "./example/ciphertext" \
   --iv-input-path "./example/iv" \
-  --new-keys-output-path "./example/keys_new.key" \
   --reencrypted-output-path "./example/reencrypted"
 ```
 ### Decryption
 ```
 ./proxy_reencryption decrypt \
-  --keys-path "./example/keys_new.key" \
+  --keys-path "./example/decrypt_keys.key" \
   --counter 10 \
   --iv-input-path "./example/iv" \
   --ciphertext-input-path "./example/reencrypted" \
