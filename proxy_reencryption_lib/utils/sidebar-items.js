@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["encrypt","hash","new_random_arr","xor"]};
